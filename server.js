@@ -6,7 +6,7 @@ configDB().catch(console.dir);
 var server = http.createServer(app);
 
 server.on('listening', onListening);
-server.listen(3000);
+server.listen(process.env.PORT || 3000);
 
 function onListening(){
     console.log('Server running at http://localhost:3000/');

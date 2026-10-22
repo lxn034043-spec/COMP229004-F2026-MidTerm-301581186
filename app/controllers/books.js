@@ -3,7 +3,7 @@ let BookModel = require('../models/books');
 module.exports.getBook = async function (req, res, next) {
   try {
     // Find one using the id sent in the parameter of the request
-    let book = await BookModel.findOne({ _id: req.params.bookId });
+    let book = await BookModel.findOne({ _id: req.params.id });
 
     res.json({
       success: true,
@@ -28,19 +28,16 @@ module.exports.create = async function (req, res, next) {
 
     // Send a response
     res.status(200);
-    res.json(
-      {
-        success: true,
-        message: "Book created successfully.",
-        data: result
-      }
-    );
+    res.json({
+      success: true,
+      message: "Book created successfully.",
+      data: result
+    });
 
   } catch (error) {
     console.log(error);
     next(error);
   }
-
 }
 
 module.exports.getAll = async function (req, res, next) {
@@ -67,7 +64,10 @@ module.exports.update = async function (req, res, next) {
     updatedBook._id = req.params.id;
 
     // Submit the change
-    let result = await BookModel.updateOne({ _id: req.params.id });
+    let result = await BookModel.updateOne(
+      { _id: req.params.id },
+      updatedBook
+    );
     console.log("Result: ", result);
 
     // Handle the result: send a response.
@@ -80,7 +80,7 @@ module.exports.update = async function (req, res, next) {
         }
       );
     } else {
-      throw new Error('Book not updated. Are you sure it exists?')
+      throw new Error('Book not updated. Are you sure it exists?');
     }
 
   } catch (error) {
@@ -88,7 +88,6 @@ module.exports.update = async function (req, res, next) {
     next(error);
   }
 }
-
 
 module.exports.remove = async function (req, res, next) {
   try {
